@@ -2,196 +2,273 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{{ name }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Digital Card</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        :root { --primary: {{ theme_color }}; }
-        
-        body { 
-            margin: 0; font-family: 'Poppins', sans-serif; 
-            background-color: #f0f2f5; color: #1f2937;
-            display: flex; justify-content: center; min-height: 100vh; 
-        }
-        
-        .app-container {
-            width: 100%; max-width: 480px; background: white; min-height: 100vh; 
-            box-shadow: 0 0 25px rgba(0,0,0,0.08); position: relative;
-            display: flex; flex-direction: column;
+        :root {
+            --primary-color: {{ theme_color }}; /* Uses color from JSON */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
         }
 
-        /* --- QR BUTTON (Top Right) --- */
-        .qr-toggle {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.4);
-            width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: white; cursor: pointer; z-index: 10;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .qr-toggle:active { transform: scale(0.9); }
-
-        /* --- QR MODAL OVERLAY --- */
-        #qr-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 100;
-            align-items: center; justify-content: center; flex-direction: column;
-            animation: fadeIn 0.2s;
-        }
-        #qr-code-box { 
-            background: white; padding: 20px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center;
-        }
-        .close-qr { 
-            color: white; margin-top: 25px; cursor: pointer; 
-            font-size: 0.9rem; border: 1px solid white; 
-            padding: 8px 20px; border-radius: 20px;
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- BANNER --- */
-        .banner {
-            height: 150px;
-            background: var(--primary);
-            background: linear-gradient(180deg, var(--primary), #222);
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* --- PROFILE --- */
-        .profile-header { text-align: center; padding: 0 20px; margin-top: -70px; }
-        
-        .avatar {
-            width: 130px; height: 130px; border-radius: 50%; 
-            border: 5px solid white; object-fit: cover; 
-            background: white;
-            background-color: #ddd; /* Fallback color */
+        .card-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 30px;
         }
 
-        h1 { margin: 15px 0 5px; font-size: 1.6rem; font-weight: 700; }
-        .role { color: var(--primary); font-weight: 600; font-size: 1rem; margin: 0; }
-        .company { color: #6b7280; font-size: 0.9rem; margin-top: 2px; }
+        /* --- PROFILE HEADER --- */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #444);
+            height: 120px;
+            border-radius: 0 0 50% 50% / 20px;
+            margin-bottom: 60px;
+            position: relative;
+        }
 
-        .bio-box { padding: 20px 30px; text-align: center; font-size: 0.95rem; color: #555; line-height: 1.6; }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-        /* --- BUTTONS --- */
-        .actions { padding: 10px 25px; display: flex; flex-direction: column; gap: 14px; }
-        
+        .info {
+            padding: 0 20px;
+        }
+
+        .info h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .info p.title {
+            color: #666;
+            margin: 5px 0 2px;
+            font-weight: 600;
+        }
+
+        .info p.company {
+            color: #888;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- ACTION BUTTONS --- */
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         .btn {
-            display: flex; align-items: center; padding: 16px; border-radius: 12px;
-            text-decoration: none; font-weight: 600; font-size: 1rem;
-            transition: 0.2s; border: none;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .btn i { width: 25px; text-align: center; font-size: 1.2rem; margin-right: 12px; }
 
-        .btn-primary { 
-            background: var(--primary); color: white; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); justify-content: center;
+        /* Save Contact Button */
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .btn-outline { background: #f9fafb; border: 1px solid #e5e7eb; color: #374151; }
-        .btn-payment { background: #fff; border: 1px dashed #cbd5e1; color: #334155; }
-
-        /* --- SOCIAL ICONS --- */
-        .social-grid { display: flex; justify-content: center; gap: 20px; margin: 10px 0 30px; }
-        .social-icon {
-            width: 50px; height: 50px; border-radius: 50%;
-            background: #f3f4f6; color: #555;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; text-decoration: none; transition: 0.2s;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
-        .social-icon:hover { background: var(--primary); color: white; }
 
-        /* --- FOOTER --- */
-        .footer { margin-top: auto; padding: 20px; text-align: center; font-size: 0.85rem; color: #999; border-top: 1px solid #f0f0f0; background: #fafafa; }
+        /* Direction & Payment Buttons (Generated by Python) */
+        .btn-outline {
+            border: 2px solid #db4437;
+            color: #db4437;
+            background: white;
+        }
+        .btn-payment {
+            background: #f1f3f4;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        /* --- CONTACT LIST --- */
+        .contact-list {
+            margin-top: 30px;
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .contact-item {
+            border-bottom: 1px solid #eee;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: background 0.2s;
+        }
+
+        .contact-link:hover {
+            background-color: #f9f9f9;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f2f5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        /* Social Colors */
+        .fa-whatsapp { color: #25D366; }
+        .fa-envelope { color: #EA4335; }
+        .fa-phone { color: #34A853; }
+        .fa-globe { color: #4285F4; }
+        .fa-map-marker-alt { color: #FBBC05; }
+
+        .about-section {
+            padding: 20px 25px;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
 
-    <div class="qr-toggle" onclick="toggleQR()">
-        <i class="fas fa-qrcode"></i>
-    </div>
-
-    <div id="qr-modal">
-        <div id="qr-code-box">
-            <div id="qr-code"></div>
-            <div style="margin-top:15px; font-weight:600; color:#333; font-size:0.9rem">Scan to Connect</div>
+    <div class="card-container">
+        
+        <div class="header">
+            <img src="{{ photo_url }}" alt="{{ name }}" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png'">
         </div>
-        <div class="close-qr" onclick="toggleQR()">Close</div>
-    </div>
 
-    <div class="app-container">
-        <div class="banner"></div>
-
-        <div class="profile-header">
-            <img src="{{ photo_url }}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png'" alt="{{ name }}" class="avatar">
+        <div class="info">
             <h1>{{ name }}</h1>
-            <p class="role">{{ position }}</p>
+            <p class="title">{{ position }}</p>
             <p class="company">{{ company }}</p>
+
+            <div class="actions">
+                <a href="contact.vcf" download="{{ name }}.vcf" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Save Contact
+                </a>
+                
+                {{ location_button }}
+                {{ payment_button }}
+            </div>
         </div>
 
-        <div class="bio-box">
+        <ul class="contact-list">
+            
+            <li class="contact-item">
+                <a href="tel:{{ phone }}" class="contact-link">
+                    <div class="icon-box"><i class="fas fa-phone"></i></div>
+                    <span>{{ phone }}</span>
+                </a>
+            </li>
+
+            <li class="contact-item">
+                <a href="https://wa.me/{{ whatsapp_clean }}" target="_blank" class="contact-link">
+                    <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
+                    <span>WhatsApp</span>
+                </a>
+            </li>
+
+            <li class="contact-item">
+                <a href="mailto:{{ email }}" class="contact-link">
+                    <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                    <span>{{ email }}</span>
+                </a>
+            </li>
+
+            <li class="contact-item">
+                <a href="{{ website }}" target="_blank" class="contact-link">
+                    <div class="icon-box"><i class="fas fa-globe"></i></div>
+                    <span>Website</span>
+                </a>
+            </li>
+
+            {% if location_text %}
+            <li class="contact-item">
+                {% if location_url %}
+                <a href="{{ location_url }}" target="_blank" class="contact-link">
+                {% else %}
+                <div class="contact-link">
+                {% endif %}
+                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                    <span>{{ location_text }}</span>
+                {% if location_url %}
+                </a>
+                {% else %}
+                </div>
+                {% endif %}
+            </li>
+            {% endif %}
+
+        </ul>
+
+        <div class="about-section">
             {{ bio }}
         </div>
 
-        <div class="actions">
-            <a href="contact.vcf" class="btn btn-primary">
-                <i class="fas fa-address-book"></i> Save Contact
-            </a>
-
-            {{ payment_button }}
-
-            <a href="tel:{{ phone }}" class="btn btn-outline">
-                <i class="fas fa-phone" style="color:var(--primary)"></i> Call Mobile
-            </a>
-            
-            <a href="https://wa.me/{{ whatsapp_clean }}" class="btn btn-outline">
-                <i class="fab fa-whatsapp" style="color:#25D366"></i> WhatsApp
-            </a>
-
-            <a href="mailto:{{ email }}" class="btn btn-outline">
-                <i class="fas fa-envelope" style="color:#EA4335"></i> Email
-            </a>
-        </div>
-
-        <div class="social-grid">
-            <a href="{{ website }}" target="_blank" class="social-icon">
-                <i class="fas fa-globe"></i>
-            </a>
-            
-            {% if location_url %}
-            <a href="{{ location_url }}" target="_blank" class="social-icon">
-                <i class="fas fa-map-marker-alt"></i>
-            </a>
-            {% endif %}
-        </div>
-
         <div class="footer">
-            {% if location_text %}{{ location_text }}{% endif %}
+            &copy; 2025 Padmavati Enterprise
         </div>
+
     </div>
-
-    <script>
-        // Generate QR Code inside the hidden modal
-        new QRCode(document.getElementById("qr-code"), {
-            text: window.location.href,
-            width: 200,
-            height: 200,
-            colorDark : "{{ theme_color }}",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-
-        // Toggle Function
-        function toggleQR() {
-            const modal = document.getElementById('qr-modal');
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
-        }
-    </script>
 
 </body>
 </html>
