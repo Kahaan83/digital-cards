@@ -1,0 +1,32 @@
+[
+    {
+      "id": "nirav",
+      "name": "Nirav Shah",
+      "position": "Owner",
+      "company": "Padmavati Enterprise",
+      "bio": "We are dealing with more than 800 Doctors and Hospitals satisfactorily for 40 years. PADMAVATI Enterprise is a one-stop solution for Designing, Printing, and Branding only for Health Care.<br><br>We believe that a doctor is a hard-working social entrepreneur. We are here to share the load with you.",
+      "phone": "+919426338720",
+      "email": "sarthaktradingco@gmail.com",
+      "website": "https://padmavatienterprise.com",
+      "location_url": "https://maps.app.goo.gl/S5KWFRNt5ELt4oxG9",
+      "location_text": "7, 38, Patrakar Colony, Vijay Nagar, Naranpura, Ahmedabad, Gujarat 380013",
+      "upi_id": "sarthaktradingco-1@okaxis",
+      "photo_url": "nirav.png",
+      "theme_color": "#2c3e50"
+    },
+    {
+      "id": "kahaan",
+      "name": "Kahaan Shah",
+      "position": "BTech CSE Student",
+      "company": "Ahmedabad University",
+      "bio": "Hi, I am a Computer Science student passionate about digital logic, electronics, and macroeconomics. Currently working on open-economy macroeconomic models and volunteering for social causes in Ahmedabad.",
+      "phone": "+919000000000",
+      "email": "kahaan@example.com",
+      "website": "https://linkedin.com/in/yourprofile",
+      "location_url": "",
+      "location_text": "Ahmedabad, Gujarat",
+      "upi_id": "",
+      "photo_url": "kahaan.jpg",
+      "theme_color": "#e74c3c"
+    }
+  ]
