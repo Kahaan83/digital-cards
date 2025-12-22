@@ -51,12 +51,13 @@ def generate_contact_list(user):
     # Generates the list items (Phone, Email, Loc) in Python to avoid HTML errors
     items = []
     
-    # Phone
+    # Phone (Formatted with space)
+    display_phone = user['phone'].replace('+91', '+91 ')
     items.append(f'''
     <li class="contact-item">
         <a href="tel:{user['phone']}" class="contact-link">
             <div class="icon-box"><i class="fas fa-phone"></i></div>
-            <span>{user['phone']}</span>
+            <span>{display_phone}</span>
         </a>
     </li>''')
 
