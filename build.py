@@ -1,182 +1,165 @@
-import json
-import os
-import re
-import urllib.parse
-import shutil
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUTPUT_DIR = os.path.join(BASE_DIR, 'public')
-PHOTOS_DIR = os.path.join(BASE_DIR, 'photos')
-
-def clean_phone(phone):
-    return re.sub(r'[^0-9]', '', phone)
-
-def find_image(filename, dest):
-    if not filename: return None
-    if filename.startswith('http'): return filename
-    
-    # Try exact match
-    src = os.path.join(PHOTOS_DIR, filename)
-    if os.path.exists(src):
-        shutil.copy(src, os.path.join(dest, filename))
-        return filename
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: {{ theme_color }}; --bg: #f0f2f5; }
         
-    # Try extensions
-    name = os.path.splitext(filename)[0]
-    for ext in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG']:
-        if os.path.exists(os.path.join(PHOTOS_DIR, name + ext)):
-            shutil.copy(os.path.join(PHOTOS_DIR, name + ext), os.path.join(dest, name + ext))
-            return name + ext
-    return None
-
-def generate_socials(user):
-    # Generates icons only if links exist
-    platforms = {
-        'instagram': 'fab fa-instagram',
-        'facebook': 'fab fa-facebook-f',
-        'linkedin': 'fab fa-linkedin-in',
-        'twitter': 'fab fa-x-twitter',
-        'youtube': 'fab fa-youtube'
-    }
-    html = '<div class="social-section">'
-    has_links = False
-    for key, icon in platforms.items():
-        if user.get(key):
-            html += f'<a href="{user[key]}" target="_blank" class="social-icon"><i class="{icon}"></i></a>'
-            has_links = True
-    html += '</div>'
-    return html if has_links else ""
-
-def generate_contact_list(user):
-    # Generates the list items (Phone, Email, Loc) in Python to avoid HTML errors
-    items = []
-    
-    # Phone (Formatted with space)
-    display_phone = user['phone'].replace('+91', '+91 ')
-    items.append(f'''
-    <li class="contact-item">
-        <a href="tel:{user['phone']}" class="contact-link">
-            <div class="icon-box"><i class="fas fa-phone"></i></div>
-            <span>{display_phone}</span>
-        </a>
-    </li>''')
-    # WhatsApp
-    clean_wa = clean_phone(user['phone'])
-    items.append(f'''
-    <li class="contact-item">
-        <a href="https://wa.me/{clean_wa}" target="_blank" class="contact-link">
-            <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
-            <span>WhatsApp</span>
-        </a>
-    </li>''')
-
-    # Email (Conditional)
-    if user.get('email'):
-        items.append(f'''
-        <li class="contact-item">
-            <a href="mailto:{user['email']}" class="contact-link">
-                <div class="icon-box"><i class="fas fa-envelope"></i></div>
-                <span>{user['email']}</span>
-            </a>
-        </li>''')
-
-    # Website (Conditional)
-    if user.get('website'):
-        items.append(f'''
-        <li class="contact-item">
-            <a href="{user['website']}" target="_blank" class="contact-link">
-                <div class="icon-box"><i class="fas fa-globe"></i></div>
-                <span>Website</span>
-            </a>
-        </li>''')
-
-    # Location (Smart Logic: Link vs Text)
-    if user.get('location_text'):
-        text = user['location_text']
-        url = user.get('location_url')
-        
-        if url:
-            # It's a link
-            items.append(f'''
-            <li class="contact-item">
-                <a href="{url}" target="_blank" class="contact-link">
-                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                    <span>{text}</span>
-                </a>
-            </li>''')
-        else:
-            # It's just text
-            items.append(f'''
-            <li class="contact-item">
-                <div class="contact-link">
-                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                    <span>{text}</span>
-                </div>
-            </li>''')
-
-    return "".join(items)
-
-def main():
-    with open(os.path.join(BASE_DIR, 'data.json'), 'r', encoding='utf-8') as f: users = json.load(f)
-    with open(os.path.join(BASE_DIR, 'template.html'), 'r', encoding='utf-8') as f: template = f.read()
-
-    if os.path.exists(OUTPUT_DIR): shutil.rmtree(OUTPUT_DIR)
-    os.makedirs(OUTPUT_DIR)
-
-    for user in users:
-        u_dir = os.path.join(OUTPUT_DIR, user['id'])
-        os.makedirs(u_dir)
-
-        # Images
-        photo = find_image(user['photo_url'], u_dir)
-        banner = find_image(user.get('banner_url'), u_dir)
-        
-        # Banner CSS
-        if banner:
-            banner_css = f"background-image: url('{banner}'); background-size: cover; background-position: center;"
-        else:
-            banner_css = f"background: linear-gradient(135deg, {user.get('theme_color', '#333')}, #444);"
-
-        # Buttons
-        loc_btn = ""
-        if user.get('location_url'):
-            loc_btn = f'''<a href="{user['location_url']}" target="_blank" class="btn btn-outline"><i class="fas fa-map-marker-alt" style="color:#db4437"></i> Direction</a>'''
-        
-        pay_btn = ""
-        if user.get('upi_id'):
-            pay_link = f"upi://pay?pa={user['upi_id']}&pn={urllib.parse.quote(user['name'])}&cu=INR"
-            pay_btn = f'''<a href="{pay_link}" class="btn btn-payment"><i class="fab fa-google-pay" style="color:#4285F4"></i> Pay</a>'''
-
-        # Generate HTML sections
-        contact_html = generate_contact_list(user)
-        social_html = generate_socials(user)
-
-        # Replace in Template
-        content = template
-        replacements = {
-            '{{ name }}': user['name'],
-            '{{ position }}': user['position'],
-            '{{ company }}': user['company'],
-            '{{ bio }}': user.get('bio', ''),
-            '{{ theme_color }}': user.get('theme_color', '#333'),
-            '{{ photo_url }}': photo,
-            '{{ banner_style }}': banner_css,
-            '{{ location_button }}': loc_btn,
-            '{{ payment_button }}': pay_btn,
-            '{{ contact_list }}': contact_html,   # <--- The magic fix
-            '{{ social_section }}': social_html
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow-x: hidden; /* Prevent scroll bars during animation */
         }
 
-        for k, v in replacements.items():
-            content = content.replace(k, str(v))
+        /* --- ANIMATIONS DEFINITIONS --- */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        with open(os.path.join(u_dir, 'index.html'), 'w', encoding='utf-8') as f: f.write(content)
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
+            70% { opacity: 1; transform: scale(1.1) translateY(-65px); } /* Slight bounce */
+            100% { opacity: 1; transform: scale(1) translateY(-65px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- CARD STYLES --- */
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 24px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            padding-bottom: 30px; 
+            
+            /* Animation: Card slides up immediately */
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
         
-        # VCard
-        vcard = f"BEGIN:VCARD\nVERSION:3.0\nFN:{user['name']}\nTEL:{user['phone']}\nEND:VCARD"
-        with open(os.path.join(u_dir, 'contact.vcf'), 'w', encoding='utf-8') as f: f.write(vcard)
+        .header { width: 100%; height: 140px; position: relative; {{ banner_style }} }
+        
+        .profile-img { 
+            width: 130px; 
+            height: 130px; 
+            border-radius: 50%; 
+            border: 5px solid white; 
+            object-fit: cover; 
+            margin-top: -65px; 
+            background: #fff; 
+            position: relative; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
 
-        print(f"✅ Built {user['name']}")
+            /* Animation: Pop effect with delay */
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+            animation-delay: 0.2s;
+        }
+        
+        .info { padding: 10px 20px; animation: fadeIn 1s ease backwards; animation-delay: 0.4s; }
+        h1 { margin: 10px 0 0; font-size: 1.5rem; color: #333; }
+        .role { color: var(--primary); font-weight: 500; margin: 0; }
+        .comp { color: #888; font-size: 0.9rem; margin: 0; }
+        
+        .actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; padding: 0 20px; flex-wrap: wrap; }
+        .btn { padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .btn-outline { border: 1px solid #db4437; color: #db4437; flex: 1; justify-content: center; }
+        .btn-payment { background: #f0f4ff; color: #0056b3; border: 1px solid #cce5ff; flex: 1; justify-content: center; }
 
-if __name__ == "__main__":
-    main()
+        /* --- LIST STYLES --- */
+        .contact-list { list-style: none; padding: 0 20px; margin-top: 30px; }
+        
+        /* The Waterfall Effect */
+        .contact-item { 
+            margin-bottom: 10px; 
+            /* Hidden initially, then slides up */
+            animation: slideUp 0.6s ease-out backwards;
+        }
+        
+        /* Staggered Delays (Wait longer for each item) */
+        .contact-item:nth-child(1) { animation-delay: 0.3s; }
+        .contact-item:nth-child(2) { animation-delay: 0.4s; }
+        .contact-item:nth-child(3) { animation-delay: 0.5s; }
+        .contact-item:nth-child(4) { animation-delay: 0.6s; }
+        .contact-item:nth-child(5) { animation-delay: 0.7s; }
+
+        .contact-link { display: flex; align-items: center; padding: 12px 16px; background: #fff; border: 1px solid #eee; border-radius: 16px; text-decoration: none; color: #333; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .contact-link:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        
+        /* Alignment Fix from previous step */
+        .contact-link span { text-align: left; flex: 1; }
+
+        .icon-box { width: 36px; height: 36px; background: #f8f9fa; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #555; }
+        
+        /* Smart Colors (Preserved) */
+        .contact-item:has(.fa-phone) .icon-box { color: #2ecc71; background: #eafff0; }
+        .contact-item:has(.fa-phone) .contact-link:hover { border-color: #2ecc71; }
+        
+        .contact-item:has(.fa-whatsapp) .icon-box { color: #25D366; background: #e6ffed; }
+        .contact-item:has(.fa-whatsapp) .contact-link:hover { border-color: #25D366; }
+        
+        .contact-item:has(.fa-envelope) .icon-box { color: #e74c3c; background: #fff0ef; }
+        .contact-item:has(.fa-envelope) .contact-link:hover { border-color: #e74c3c; }
+        
+        .contact-item:has(.fa-globe) .icon-box { color: #3498db; background: #f0f8ff; }
+        .contact-item:has(.fa-globe) .contact-link:hover { border-color: #3498db; }
+        
+        .contact-item:has(.fa-map-marker-alt) .icon-box { color: #f1c40f; background: #fffbe6; }
+        .contact-item:has(.fa-map-marker-alt) .contact-link:hover { border-color: #f1c40f; }
+
+        .social-section { 
+            display: flex; justify-content: center; gap: 15px; margin: 25px 0; 
+            animation: fadeIn 1s ease backwards; animation-delay: 0.8s;
+        }
+        .social-icon { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #555; font-size: 1.2rem; text-decoration: none; box-shadow: 0 3px 8px rgba(0,0,0,0.1); transition: 0.2s; }
+        .social-icon:hover { color: var(--primary); transform: translateY(-3px) scale(1.1); }
+
+        .about { padding: 0 30px; font-size: 0.9rem; color: #666; line-height: 1.6; animation: fadeIn 1s ease backwards; animation-delay: 0.9s; }
+        .footer { margin-top: 20px; font-size: 0.75rem; color: #ccc; animation: fadeIn 1s ease backwards; animation-delay: 1s; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header"></div>
+        <img src="{{ photo_url }}" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png'">
+        
+        <div class="info">
+            <h1>{{ name }}</h1>
+            <p class="role">{{ position }}</p>
+            <p class="comp">{{ company }}</p>
+
+            <div class="actions">
+                <a href="contact.vcf" download="{{ name }}.vcf" class="btn btn-primary"><i class="fas fa-user-plus"></i> Save Contact</a>
+                {{ location_button }}
+                {{ payment_button }}
+            </div>
+        </div>
+
+        <ul class="contact-list">
+            {{ contact_list }}
+        </ul>
+
+        {{ social_section }}
+
+        <div class="about">{{ bio }}</div>
+        <div class="footer">© 2025 Padmavati Enterprise</div>
+    </div>
+</body>
+</html>
