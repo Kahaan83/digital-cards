@@ -60,7 +60,6 @@ def generate_contact_list(user):
             <span>{display_phone}</span>
         </a>
     </li>''')
-
     # WhatsApp
     clean_wa = clean_phone(user['phone'])
     items.append(f'''
