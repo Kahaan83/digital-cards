@@ -18,19 +18,13 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            overflow-x: hidden; /* Prevent scroll bars during animation */
+            overflow-x: hidden; 
         }
 
-        /* --- ANIMATIONS DEFINITIONS --- */
+        /* --- ANIMATIONS --- */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.5) translateY(-50px); }
-            70% { opacity: 1; transform: scale(1.1) translateY(-65px); } /* Slight bounce */
-            100% { opacity: 1; transform: scale(1) translateY(-65px); }
         }
 
         @keyframes fadeIn {
@@ -38,7 +32,7 @@
             to { opacity: 1; }
         }
 
-        /* --- CARD STYLES --- */
+        /* --- CARD --- */
         .card { 
             background: white; 
             width: 100%; 
@@ -49,12 +43,13 @@
             text-align: center; 
             padding-bottom: 30px; 
             
-            /* Animation: Card slides up immediately */
+            /* Card Slide-Up Animation */
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         
         .header { width: 100%; height: 140px; position: relative; {{ banner_style }} }
         
+        /* STATIC PROFILE IMAGE (No Animation) */
         .profile-img { 
             width: 130px; 
             height: 130px; 
@@ -65,13 +60,9 @@
             background: #fff; 
             position: relative; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
-
-            /* Animation: Pop effect with delay */
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
-            animation-delay: 0.2s;
         }
         
-        .info { padding: 10px 20px; animation: fadeIn 1s ease backwards; animation-delay: 0.4s; }
+        .info { padding: 10px 20px; animation: fadeIn 1s ease backwards; animation-delay: 0.2s; }
         h1 { margin: 10px 0 0; font-size: 1.5rem; color: #333; }
         .role { color: var(--primary); font-weight: 500; margin: 0; }
         .comp { color: #888; font-size: 0.9rem; margin: 0; }
@@ -83,17 +74,16 @@
         .btn-outline { border: 1px solid #db4437; color: #db4437; flex: 1; justify-content: center; }
         .btn-payment { background: #f0f4ff; color: #0056b3; border: 1px solid #cce5ff; flex: 1; justify-content: center; }
 
-        /* --- LIST STYLES --- */
+        /* --- CONTACT LIST --- */
         .contact-list { list-style: none; padding: 0 20px; margin-top: 30px; }
         
         /* The Waterfall Effect */
         .contact-item { 
             margin-bottom: 10px; 
-            /* Hidden initially, then slides up */
             animation: slideUp 0.6s ease-out backwards;
         }
         
-        /* Staggered Delays (Wait longer for each item) */
+        /* Staggered Delays */
         .contact-item:nth-child(1) { animation-delay: 0.3s; }
         .contact-item:nth-child(2) { animation-delay: 0.4s; }
         .contact-item:nth-child(3) { animation-delay: 0.5s; }
@@ -103,12 +93,12 @@
         .contact-link { display: flex; align-items: center; padding: 12px 16px; background: #fff; border: 1px solid #eee; border-radius: 16px; text-decoration: none; color: #333; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .contact-link:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
         
-        /* Alignment Fix from previous step */
+        /* Left Align Text */
         .contact-link span { text-align: left; flex: 1; }
 
         .icon-box { width: 36px; height: 36px; background: #f8f9fa; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #555; }
         
-        /* Smart Colors (Preserved) */
+        /* Smart Colors */
         .contact-item:has(.fa-phone) .icon-box { color: #2ecc71; background: #eafff0; }
         .contact-item:has(.fa-phone) .contact-link:hover { border-color: #2ecc71; }
         
