@@ -1,5 +1,10 @@
 BEGIN:VCARD
 VERSION:3.0
 FN:Kahaan Shah
-TEL:+919000000000
+ORG:Ahmedabad University
+TITLE:BTech CSE Student
+TEL;TYPE=WORK,VOICE:+919409607824
+EMAIL:kahaan@example.com
+URL:
+NOTE:Computer Science student passionate about digital logic and macroeconomics. LinkedIn: https://linkedin.com/in/kahaan 
 END:VCARD
