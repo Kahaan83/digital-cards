@@ -1,5 +1,3 @@
-Here is the full, complete Markdown code. You can copy the entire block below and paste it directly into your `README.md` file.
-
 ```markdown
 # 📇 Automated Digital Business Card Generator
 
@@ -108,6 +106,3 @@ git push origin main
 
 *Built with ❤️ by Kahaan Shah*
 
-```
-
-```
