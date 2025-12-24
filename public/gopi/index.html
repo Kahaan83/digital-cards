@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gopi Shah</title>
+    
+    <link rel="icon" href="gopi.jpeg">
+    <meta property="og:title" content="Gopi Shah - ">
+    <meta property="og:description" content="Padmavati Enterprise">
+    <meta property="og:image" content="gopi.jpeg">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #e74c3c; --bg: #f0f2f5; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow-x: hidden; 
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0); } 80% { opacity: 1; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
+
+        /* --- CARD --- */
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 24px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            padding-bottom: 30px; 
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+        }
+        
+        .header { width: 100%; height: 140px; position: relative; background-image: url('banner_padmavati.png'); background-size: cover; background-position: center; }
+        
+        /* QR Button (Top Right of Header) */
+        .qr-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .qr-btn:hover { background: rgba(0,0,0,0.6); transform: scale(1.1); }
+
+        .profile-img { 
+            width: 130px; height: 130px; border-radius: 50%; border: 5px solid white; 
+            object-fit: cover; margin-top: -65px; background: #fff; position: relative; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+        }
+        
+        .info { padding: 10px 20px; animation: fadeIn 1s ease backwards; animation-delay: 0.2s; }
+        h1 { margin: 10px 0 0; font-size: 1.5rem; color: #333; }
+        .role { color: var(--primary); font-weight: 500; margin: 0; }
+        .comp { color: #888; font-size: 0.9rem; margin: 0; }
+        
+        .actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; padding: 0 20px; flex-wrap: wrap; }
+        .btn { padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .btn-outline { border: 1px solid #db4437; color: #db4437; flex: 1; justify-content: center; }
+        .btn-payment { background: #f0f4ff; color: #0056b3; border: 1px solid #cce5ff; flex: 1; justify-content: center; }
+
+        /* --- CONTACT LIST --- */
+        .contact-list { list-style: none; padding: 0 20px; margin-top: 30px; }
+        .contact-item { margin-bottom: 10px; animation: slideUp 0.6s ease-out backwards; }
+        
+        .contact-item:nth-child(1) { animation-delay: 0.3s; }
+        .contact-item:nth-child(2) { animation-delay: 0.4s; }
+        .contact-item:nth-child(3) { animation-delay: 0.5s; }
+        .contact-item:nth-child(4) { animation-delay: 0.6s; }
+        .contact-item:nth-child(5) { animation-delay: 0.7s; }
+
+        .contact-link { display: flex; align-items: center; padding: 12px 16px; background: #fff; border: 1px solid #eee; border-radius: 16px; text-decoration: none; color: #333; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .contact-link:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .contact-link span { text-align: left; flex: 1; }
+
+        .icon-box { width: 36px; height: 36px; background: #f8f9fa; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #555; }
+        
+        /* Smart Colors */
+        .contact-item:has(.fa-phone) .icon-box { color: #2ecc71; background: #eafff0; }
+        .contact-item:has(.fa-phone) .contact-link:hover { border-color: #2ecc71; }
+        .contact-item:has(.fa-whatsapp) .icon-box { color: #25D366; background: #e6ffed; }
+        .contact-item:has(.fa-whatsapp) .contact-link:hover { border-color: #25D366; }
+        .contact-item:has(.fa-envelope) .icon-box { color: #e74c3c; background: #fff0ef; }
+        .contact-item:has(.fa-envelope) .contact-link:hover { border-color: #e74c3c; }
+        .contact-item:has(.fa-globe) .icon-box { color: #3498db; background: #f0f8ff; }
+        .contact-item:has(.fa-globe) .contact-link:hover { border-color: #3498db; }
+        .contact-item:has(.fa-map-marker-alt) .icon-box { color: #f1c40f; background: #fffbe6; }
+        .contact-item:has(.fa-map-marker-alt) .contact-link:hover { border-color: #f1c40f; }
+
+        .social-section { display: flex; justify-content: center; gap: 15px; margin: 25px 0; animation: fadeIn 1s ease backwards; animation-delay: 0.8s; }
+        .social-icon { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #555; font-size: 1.2rem; text-decoration: none; box-shadow: 0 3px 8px rgba(0,0,0,0.1); transition: 0.2s; }
+        .social-icon:hover { color: var(--primary); transform: translateY(-3px) scale(1.1); }
+
+        .about { padding: 0 30px; font-size: 0.9rem; color: #666; line-height: 1.6; animation: fadeIn 1s ease backwards; animation-delay: 0.9s; }
+        .footer { margin-top: 20px; font-size: 0.75rem; color: #ccc; animation: fadeIn 1s ease backwards; animation-delay: 1s; padding-bottom: 80px; }
+
+        /* Floating Share Button */
+        .share-float {
+            position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px;
+            background: var(--primary); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer;
+            font-size: 1.2rem; z-index: 100;
+            animation: popIn 0.6s backwards; animation-delay: 1.2s;
+        }
+        .share-float:active { transform: scale(0.9); }
+
+        /* --- QR MODAL --- */
+        .qr-modal {
+            display: none; /* Hidden by default */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center; align-items: center; flex-direction: column;
+            animation: fadeIn 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .qr-box {
+            background: white; padding: 25px; border-radius: 20px;
+            text-align: center; width: 80%; max-width: 300px;
+            animation: popIn 0.3s;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .qr-img { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        .close-qr {
+            margin-top: 15px; color: white; font-size: 2rem; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="qr-btn" onclick="openQR()">
+                <i class="fas fa-qrcode"></i>
+            </div>
+        </div>
+        
+        <img src="gopi.jpeg" class="profile-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png'">
+        
+        <div class="info">
+            <h1>Gopi Shah</h1>
+            <p class="role"></p>
+            <p class="comp">Padmavati Enterprise</p>
+
+            <div class="actions">
+                <a href="contact.vcf" download="Gopi Shah.vcf" class="btn btn-primary"><i class="fas fa-user-plus"></i> Save Contact</a>
+                <a href="https://maps.app.goo.gl/S5KWFRNt5ELt4oxG9" target="_blank" class="btn btn-outline"><i class="fas fa-map-marker-alt" style="color:#db4437"></i> Direction</a>
+                
+            </div>
+        </div>
+
+        <ul class="contact-list">
+            
+    <li class="contact-item">
+        <a href="tel:9428801716" class="contact-link">
+            <div class="icon-box"><i class="fas fa-phone"></i></div>
+            <span>9428801716</span>
+        </a>
+    </li>
+    <li class="contact-item">
+        <a href="https://wa.me/9428801716" target="_blank" class="contact-link">
+            <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
+            <span>WhatsApp</span>
+        </a>
+    </li>
+        <li class="contact-item">
+            <a href="mailto:shahgopin@gmail.com" class="contact-link">
+                <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                <span>shahgopin@gmail.com</span>
+            </a>
+        </li>
+        <li class="contact-item">
+            <a href="https://padmavatienterprise.com" target="_blank" class="contact-link">
+                <div class="icon-box"><i class="fas fa-globe"></i></div>
+                <span>Website</span>
+            </a>
+        </li>
+            <li class="contact-item">
+                <a href="https://maps.app.goo.gl/S5KWFRNt5ELt4oxG9" target="_blank" class="contact-link">
+                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                    <span>7/38, Patrakar Colony, Ahmedabad, Gujarat</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="social-section"><a href="https://instagram.com/gopishah001" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a></div>
+
+        <div class="about"></div>
+        <div class="footer">© 2025 Padmavati Enterprise</div>
+    </div>
+
+    <div class="share-float" onclick="shareCard()">
+        <i class="fas fa-share-alt"></i>
+    </div>
+
+    <div class="qr-modal" id="qrModal" onclick="closeQR()">
+        <div class="qr-box" onclick="event.stopPropagation()">
+            <h3 style="margin-top:0; color:#333;">Scan Me</h3>
+            <img id="qrImage" src="" class="qr-img" alt="QR Code">
+            <p style="margin:0; font-size:0.9rem; color:#666;">Scan to view profile</p>
+        </div>
+        <div class="close-qr">&times;</div>
+    </div>
+
+    <script>
+        // Share Function
+        function shareCard() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Gopi Shah - Digital Card',
+                    text: 'Connect with me!',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied to clipboard!");
+            }
+        }
+
+        // QR Functions
+        function openQR() {
+            const modal = document.getElementById('qrModal');
+            const img = document.getElementById('qrImage');
+            // Generate QR Code dynamically based on current Page URL
+            img.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(window.location.href);
+            modal.style.display = 'flex';
+        }
+        function closeQR() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

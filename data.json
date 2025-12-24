@@ -46,5 +46,29 @@
     "linkedin": "https://linkedin.com/in/kahaan",
     "twitter": "https://x.com/kahaan",
     "youtube": ""
+  },
+  {
+    "id": "gopi",
+    "name": "Gopi Shah",
+    "position": "",
+    "company": "Padmavati Enterprise",
+    "bio": "",
+    "phone": "9428801716",
+    "email": "shahgopin@gmail.com",
+    "website": "https://padmavatienterprise.com",
+    
+    "location_url": "https://maps.app.goo.gl/S5KWFRNt5ELt4oxG9",
+    "location_text": "7/38, Patrakar Colony, Ahmedabad, Gujarat",
+    "upi_id": "",
+    
+    "photo_url": "gopi.jpg",
+    "banner_url": "banner_padmavati.jpg", 
+    "theme_color": "#e74c3c",
+
+    "instagram": "https://instagram.com/gopishah001",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
   }
 ]
