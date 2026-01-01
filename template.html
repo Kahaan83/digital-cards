@@ -152,6 +152,17 @@
         .close-qr {
             margin-top: 15px; color: white; font-size: 2rem; cursor: pointer;
         }
+        /* Footer Link Style */
+        .footer-link {
+        color: inherit;          /* Keep the grey color */
+        text-decoration: none;   /* Remove the underline */
+        transition: 0.3s;
+        font-weight: 500;
+        }
+        .footer-link:hover {
+        color: var(--primary);   /* Turn brand color on hover */
+        text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -183,8 +194,9 @@
         {{ social_section }}
 
         <div class="about">{{ bio }}</div>
-        <div class="footer">© 2025 Padmavati Enterprise</div>
-    </div>
+        <div class="footer">
+            © 2026 <a href="https://www.padmavatienterprise.com" target="_blank" class="footer-link">Padmavati Enterprise</a>
+        </div>
 
     <div class="share-float" onclick="shareCard()">
         <i class="fas fa-share-alt"></i>

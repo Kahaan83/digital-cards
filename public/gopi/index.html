@@ -152,6 +152,17 @@
         .close-qr {
             margin-top: 15px; color: white; font-size: 2rem; cursor: pointer;
         }
+        /* Footer Link Style */
+        .footer-link {
+        color: inherit;          /* Keep the grey color */
+        text-decoration: none;   /* Remove the underline */
+        transition: 0.3s;
+        font-weight: 500;
+        }
+        .footer-link:hover {
+        color: var(--primary);   /* Turn brand color on hover */
+        text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -213,8 +224,9 @@
         <div class="social-section"><a href="https://instagram.com/gopishah001" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a></div>
 
         <div class="about"></div>
-        <div class="footer">© 2025 Padmavati Enterprise</div>
-    </div>
+        <div class="footer">
+            © 2026 <a href="https://www.padmavatienterprise.com" target="_blank" class="footer-link">Padmavati Enterprise</a>
+        </div>
 
     <div class="share-float" onclick="shareCard()">
         <i class="fas fa-share-alt"></i>
