@@ -5,6 +5,37 @@ import urllib.parse
 import shutil
 import hashlib  # <--- New Tool for creating fingerprints
 
+
+static_dir = './static_pages'
+output_dir = './public' 
+
+print("\n--- Starting Static File Copy ---")
+
+# 1. Check if the static_pages folder actually exists where the script is looking
+if not os.path.exists(static_dir):
+    print(f"❌ ERROR: Could not find the folder '{static_dir}'.")
+    print("Check: Are you running this script from the main project folder? Is the folder named exactly 'static_pages'?")
+else:
+    print(f"✅ Found '{static_dir}'. Looking for files...")
+    
+    # 2. Check if the public folder exists (create it if your script deleted it completely)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created missing '{output_dir}' folder.")
+
+    # 3. Try to copy the files
+    files_copied = 0
+    for filename in os.listdir(static_dir):
+        source_file = os.path.join(static_dir, filename)
+        dest_file = os.path.join(output_dir, filename)
+        
+        if os.path.isfile(source_file):
+            shutil.copy2(source_file, dest_file)
+            print(f"➡️ Copied: {filename}")
+            files_copied += 1
+            
+    print(f"--- Finished! Copied {files_copied} files. ---\n")
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, 'public')
 PHOTOS_DIR = os.path.join(BASE_DIR, 'photos')
@@ -230,17 +261,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-import shutil
-import os
-
-static_dir = './static_pages'
-output_dir = './public' # Your actual output directory
-
-# Copy all manually created static files to the final build folder
-if os.path.exists(static_dir):
-    for filename in os.listdir(static_dir):
-        source_file = os.path.join(static_dir, filename)
-        dest_file = os.path.join(output_dir, filename)
-        
-        if os.path.isfile(source_file):
-            shutil.copy2(source_file, dest_file)
