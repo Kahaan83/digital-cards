@@ -229,3 +229,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+import shutil
+import os
+
+static_dir = './static_pages'
+output_dir = './public' # Your actual output directory
+
+# Copy all manually created static files to the final build folder
+if os.path.exists(static_dir):
+    for filename in os.listdir(static_dir):
+        source_file = os.path.join(static_dir, filename)
+        dest_file = os.path.join(output_dir, filename)
+        
+        if os.path.isfile(source_file):
+            shutil.copy2(source_file, dest_file)
