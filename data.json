@@ -118,5 +118,29 @@
     "linkedin": "https://www.linkedin.com/company/whitecare-dental-clinic/about/?viewAsMember=true",
     "twitter": "",
     "youtube": ""
+  }, 
+   {
+    "id": "dharmik",
+    "name": "Dharmik Mehta",
+    "position": "BTech CSE Student",
+    "company": "Ahmedabad University",
+    "bio": "Computer Science student passionate about digital logic and macroeconomics.",
+    "phone": "+91940960782423345",
+    "email": "kahaan@example.com",
+    "website": "",
+    
+    "location_url": "",
+    "location_text": "Ahmedabad, Gujarat",
+    "upi_id": "",
+    
+    "photo_url": "kahaan.jpg",
+    "banner_url": "", 
+    "theme_color": "#e74c3c",
+
+    "instagram": "https://instagram.com/kahaan",
+    "facebook": "",
+    "linkedin": "https://linkedin.com/in/kahaan",
+    "twitter": "https://x.com/kahaan",
+    "youtube": ""
   }
 ]
