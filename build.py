@@ -226,6 +226,10 @@ def main():
                 pay_link = f"upi://pay?pa={user['upi_id']}&pn={urllib.parse.quote(user['name'])}&cu=INR"
                 pay_btn = f'''<a href="{pay_link}" class="btn btn-payment"><i class="fab fa-google-pay" style="color:#4285F4"></i> Pay</a>'''
 
+            catalogue_btn = ""
+            if user.get('catalogue_url'):
+                catalogue_btn = f'''<a href="{user['catalogue_url']}" target="_blank" class="btn btn-outline" style="border-color:#0E82E3; color:#0E82E3;"><i class="fas fa-book-open"></i> Catalogue</a>'''
+
             contact_html = generate_contact_list(user)
             social_html = generate_socials(user)
 
@@ -241,7 +245,8 @@ def main():
                 '{{ location_button }}': loc_btn,
                 '{{ payment_button }}': pay_btn,
                 '{{ contact_list }}': contact_html,
-                '{{ social_section }}': social_html
+                '{{ social_section }}': social_html,
+                '{{ catalogue_button }}': catalogue_btn,
             }
 
             for k, v in replacements.items():
