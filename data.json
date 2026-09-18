@@ -142,5 +142,55 @@
     "linkedin": "",
     "twitter": "",
     "youtube": ""
+  },
+  {
+    "id": "shreeji",
+    "name": "Shreeji Mediquip PVT. LTD.",
+    "position": "Manufacturing Advanced Surgical Table, Surgical Led Lights, Delivery (Labour) Table, Examination Table. ",
+    "company": "",
+    "bio": "",
+    "phone": "+916358201947",
+    "email": "info@shreejimediquip.com ",
+    "website": "www.shreejimediquip.com",
+    
+    "location_url": "https://share.google/hTmQuVgsvhXqdJdjb",
+    "location_text": "B-25, Electronic Estate, GIDC, Sector-25, Gandhinagar - 382027, Gujarat, India.",
+    "upi_id": "",
+    
+    "photo_url": "",
+    "banner_url": "shreeji_banner.png", 
+    "theme_color": "#0E82E3",
+
+    "instagram": "",
+    "facebook": " ",
+    "linkedin": "https://www.linkedin.com/company/shreeji-mediquip/?originalSubdomain=in",
+    "twitter": "",
+    "youtube": ""
+  },
+   {
+    "id": "temp",
+    "name": "",
+    "position": "",
+    "company": "",
+    "bio": "",
+    "phone": "",
+    "email": "",
+    "website": "",
+    
+    "location_url": "",
+    "location_text": "",
+    "upi_id": "",
+    
+    "photo_url": "",
+    "banner_url": "", 
+    "theme_color": "#0E82E3",
+
+    "instagram": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
   }
 ]
+
+
