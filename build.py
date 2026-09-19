@@ -3,7 +3,7 @@ import os
 import re
 import urllib.parse
 import shutil
-import hashlib  # <--- New Tool for creating fingerprints
+import hashlib
 
 
 static_dir = './static_pages'
@@ -11,19 +11,16 @@ output_dir = './public'
 
 print("\n--- Starting Static File Copy ---")
 
-# 1. Check if the static_pages folder actually exists where the script is looking
 if not os.path.exists(static_dir):
     print(f"❌ ERROR: Could not find the folder '{static_dir}'.")
     print("Check: Are you running this script from the main project folder? Is the folder named exactly 'static_pages'?")
 else:
     print(f"✅ Found '{static_dir}'. Looking for files...")
     
-    # 2. Check if the public folder exists (create it if your script deleted it completely)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         print(f"Created missing '{output_dir}' folder.")
 
-    # 3. Try to copy the files
     files_copied = 0
     for filename in os.listdir(static_dir):
         source_file = os.path.join(static_dir, filename)
@@ -39,12 +36,11 @@ else:
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIR = os.path.join(BASE_DIR, 'public')
 PHOTOS_DIR = os.path.join(BASE_DIR, 'photos')
-STATE_FILE = os.path.join(BASE_DIR, 'build_state.json') # <--- Stores the memory
+STATE_FILE = os.path.join(BASE_DIR, 'build_state.json')
 
 def clean_phone(phone):
     return re.sub(r'[^0-9]', '', phone)
 
-# Helper to create a unique fingerprint (Hash) from text
 def get_hash(content):
     return hashlib.md5(content.encode('utf-8')).hexdigest()
 
@@ -54,7 +50,6 @@ def find_image(filename, dest):
     
     src = os.path.join(PHOTOS_DIR, filename)
     if os.path.exists(src):
-        # Only copy if destination doesn't exist or file changed
         dest_path = os.path.join(dest, filename)
         if not os.path.exists(dest_path):
             shutil.copy(src, dest_path)
@@ -70,15 +65,29 @@ def find_image(filename, dest):
     return None
 
 def generate_vcard(user):
+    # Support both string and list for phone
+    phones = user['phone']
+    if isinstance(phones, str):
+        phones = [phones]
+
+    # Support both string and list for email
+    emails = user.get('email', '')
+    if isinstance(emails, str):
+        emails = [emails] if emails else []
+
+    phone_lines = "\n".join([f"TEL;TYPE=WORK,VOICE:{p}" for p in phones])
+    email_lines = "\n".join([f"EMAIL:{e.strip()}" for e in emails if e.strip()])
+
     social_notes = ""
     if user.get('linkedin'): social_notes += f"LinkedIn: {user['linkedin']} "
+
     return f"""BEGIN:VCARD
 VERSION:3.0
 FN:{user['name']}
 ORG:{user['company']}
 TITLE:{user['position']}
-TEL;TYPE=WORK,VOICE:{user['phone']}
-EMAIL:{user['email']}
+{phone_lines}
+{email_lines}
 URL:{user['website']}
 NOTE:{user.get('bio', '').replace('<br>', ' ')} {social_notes}
 END:VCARD"""
@@ -94,7 +103,7 @@ def generate_socials(user):
     html = '<div class="social-section">'
     has_links = False
     for key, icon in platforms.items():
-        if user.get(key):
+        if user.get(key) and user[key].strip():
             html += f'<a href="{user[key]}" target="_blank" class="social-icon"><i class="{icon}"></i></a>'
             has_links = True
     html += '</div>'
@@ -102,16 +111,25 @@ def generate_socials(user):
 
 def generate_contact_list(user):
     items = []
-    display_phone = user['phone'].replace('+91', '+91 ')
-    items.append(f'''
+
+    # --- PHONE (supports string or list) ---
+    phones = user['phone']
+    if isinstance(phones, str):
+        phones = [phones]
+
+    for phone in phones:
+        if phone.strip():
+            display_phone = phone.replace('+91', '+91 ')
+            items.append(f'''
     <li class="contact-item">
-        <a href="tel:{user['phone']}" class="contact-link">
+        <a href="tel:{phone}" class="contact-link">
             <div class="icon-box"><i class="fas fa-phone"></i></div>
             <span>{display_phone}</span>
         </a>
     </li>''')
 
-    clean_wa = clean_phone(user['phone'])
+    # --- WHATSAPP (first number only) ---
+    clean_wa = clean_phone(phones[0])
     items.append(f'''
     <li class="contact-item">
         <a href="https://wa.me/{clean_wa}" target="_blank" class="contact-link">
@@ -120,43 +138,52 @@ def generate_contact_list(user):
         </a>
     </li>''')
 
-    if user.get('email'):
-        items.append(f'''
-        <li class="contact-item">
-            <a href="mailto:{user['email']}" class="contact-link">
-                <div class="icon-box"><i class="fas fa-envelope"></i></div>
-                <span>{user['email']}</span>
-            </a>
-        </li>''')
+    # --- EMAIL (supports string or list) ---
+    emails = user.get('email', '')
+    if isinstance(emails, str):
+        emails = [emails] if emails else []
 
+    for email in emails:
+        if email.strip():
+            items.append(f'''
+    <li class="contact-item">
+        <a href="mailto:{email.strip()}" class="contact-link">
+            <div class="icon-box"><i class="fas fa-envelope"></i></div>
+            <span>{email.strip()}</span>
+        </a>
+    </li>''')
+
+    # --- WEBSITE ---
     if user.get('website'):
         items.append(f'''
-        <li class="contact-item">
-            <a href="{user['website']}" target="_blank" class="contact-link">
-                <div class="icon-box"><i class="fas fa-globe"></i></div>
-                <span>Website</span>
-            </a>
-        </li>''')
+    <li class="contact-item">
+        <a href="{user['website']}" target="_blank" class="contact-link">
+            <div class="icon-box"><i class="fas fa-globe"></i></div>
+            <span>Website</span>
+        </a>
+    </li>''')
 
+    # --- LOCATION ---
     if user.get('location_text'):
         text = user['location_text']
         url = user.get('location_url')
         if url:
             items.append(f'''
-            <li class="contact-item">
-                <a href="{url}" target="_blank" class="contact-link">
-                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                    <span>{text}</span>
-                </a>
-            </li>''')
+    <li class="contact-item">
+        <a href="{url}" target="_blank" class="contact-link">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <span>{text}</span>
+        </a>
+    </li>''')
         else:
             items.append(f'''
-            <li class="contact-item">
-                <div class="contact-link">
-                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                    <span>{text}</span>
-                </div>
-            </li>''')
+    <li class="contact-item">
+        <div class="contact-link">
+            <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+            <span>{text}</span>
+        </div>
+    </li>''')
+
     return "".join(items)
 
 def main():
@@ -187,18 +214,11 @@ def main():
         u_dir = os.path.join(OUTPUT_DIR, user['id'])
         index_path = os.path.join(u_dir, 'index.html')
         
-        # Calculate fingerprint for this specific user's data
-        # We sort keys to make sure the order doesn't mess up the hash
         user_data_string = json.dumps(user, sort_keys=True)
         user_hash = get_hash(user_data_string)
         
-        # Save to new memory
         new_state['users'][user['id']] = user_hash
 
-        # DECISION: Should we rebuild?
-        # 1. Did the template change?
-        # 2. Did this user's data change?
-        # 3. Does the file not exist (deleted)?
         should_build = (
             template_changed or 
             state.get('users', {}).get(user['id']) != user_hash or
@@ -244,9 +264,9 @@ def main():
                 '{{ banner_style }}': banner_css,
                 '{{ location_button }}': loc_btn,
                 '{{ payment_button }}': pay_btn,
-                '{{ contact_list }}': contact_html,
-                '{{ social_section }}': social_html,
                 '{{ catalogue_button }}': catalogue_btn,
+                '{{ contact_list }}': contact_html,
+                '{{ social_section }}': social_html
             }
 
             for k, v in replacements.items():
@@ -265,4 +285,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
