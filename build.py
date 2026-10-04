@@ -111,17 +111,33 @@ def generate_socials(user):
     return html if has_links else ""
 
 def generate_doctors(user):
+    """Each doctor can be a plain string or a dict with
+    name / specialty / education. Rendered side by side."""
     doctors = user.get('doctors', [])
-    if isinstance(doctors, str):
+    if isinstance(doctors, (str, dict)):
         doctors = [doctors]
-    doctors = [d.strip() for d in doctors if d.strip()]
-    if not doctors:
+
+    cards = []
+    for d in doctors:
+        if isinstance(d, str):
+            d = {'name': d}
+        name = (d.get('name') or '').strip()
+        if not name:
+            continue
+        specialty = (d.get('specialty') or '').strip()
+        education = (d.get('education') or '').strip()
+
+        card = f'<div class="doctor"><i class="fas fa-user-doctor"></i><div class="doctor-name">{escape(name)}</div>'
+        if specialty:
+            card += f'<div class="doctor-specialty">{escape(specialty)}</div>'
+        if education:
+            card += f'<div class="doctor-edu">({escape(education)})</div>'
+        card += '</div>'
+        cards.append(card)
+
+    if not cards:
         return ""
-    rows = "".join(
-        f'<p class="doctor"><i class="fas fa-user-doctor"></i> {escape(d)}</p>'
-        for d in doctors
-    )
-    return f'<div class="doctors">{rows}</div>'
+    return '<div class="doctors">' + "".join(cards) + '</div>'
 
 def generate_contact_list(user):
     items = []
