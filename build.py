@@ -4,6 +4,7 @@ import re
 import urllib.parse
 import shutil
 import hashlib
+from html import escape
 
 
 static_dir = './static_pages'
@@ -109,6 +110,19 @@ def generate_socials(user):
     html += '</div>'
     return html if has_links else ""
 
+def generate_doctors(user):
+    doctors = user.get('doctors', [])
+    if isinstance(doctors, str):
+        doctors = [doctors]
+    doctors = [d.strip() for d in doctors if d.strip()]
+    if not doctors:
+        return ""
+    rows = "".join(
+        f'<p class="doctor"><i class="fas fa-user-doctor"></i> {escape(d)}</p>'
+        for d in doctors
+    )
+    return f'<div class="doctors">{rows}</div>'
+
 def generate_contact_list(user):
     items = []
 
@@ -128,13 +142,21 @@ def generate_contact_list(user):
         </a>
     </li>''')
 
-    # --- WHATSAPP (first number only) ---
-    clean_wa = clean_phone(phones[0])
-    items.append(f'''
+    # --- WHATSAPP (first number only, unless "whatsapp_all": true) ---
+    if user.get('whatsapp_all'):
+        wa_numbers = [p for p in phones if p.strip()]
+    else:
+        wa_numbers = phones[:1]
+
+    for wa in wa_numbers:
+        label = "WhatsApp"
+        if len(wa_numbers) > 1:
+            label += " " + wa.replace('+91', '+91 ')
+        items.append(f'''
     <li class="contact-item">
-        <a href="https://wa.me/{clean_wa}" target="_blank" class="contact-link">
+        <a href="https://wa.me/{clean_phone(wa)}" target="_blank" class="contact-link">
             <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
-            <span>WhatsApp</span>
+            <span>{label}</span>
         </a>
     </li>''')
 
@@ -265,6 +287,7 @@ def main():
                 '{{ location_button }}': loc_btn,
                 '{{ payment_button }}': pay_btn,
                 '{{ catalogue_button }}': catalogue_btn,
+                '{{ doctors }}': generate_doctors(user),
                 '{{ contact_list }}': contact_html,
                 '{{ social_section }}': social_html
             }

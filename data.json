@@ -170,9 +170,11 @@
   },
    {
     "id": "gokul",
-    "name": "Gokul",
-    "position": "Critical Care Hospital",
+    "name": "Gokul Critical Care Hospital",
+    "position": "Multispeciality Hospital",
     "company": "",
+    "doctors": ["Dr. Meet Bhuta", "Dr. Bhagirath Hadiyal"],
+    "whatsapp_all": true,
     "bio": "A 20+ Bed Multispeciality Hospital in the Heart of Bhavnagar, dedicated to delivering compassionate, high-quality, ethical , economical healthcare with modern facilities and expert medical care. With 24x7 availability of Intensivists, advanced critical care,  with in-house 2D Echo, laboratory, pharmacy, and dialysis services, we strive to provide comprehensive healthcare under one roof. Supported by an experienced and dedicated team, our focus is on patient safety, comfort, and well-being ",
     "phone": ["+919712712751", "+919712712752"],
     "email": "gokulcriticalcare@gmail.com",
