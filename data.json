@@ -169,6 +169,30 @@
     "youtube": ""
   },
    {
+    "id": "gokul",
+    "name": "GOKUL CRITICAL CARE HOSPITAL",
+    "position": "",
+    "company": "",
+    "bio": "A 20+ Bed Multispeciality Hospital in the Heart of Bhavnagar, dedicated to delivering compassionate, high-quality, ethical , economical healthcare with modern facilities and expert medical care. With 24x7 availability of Intensivists, advanced critical care,  with in-house 2D Echo, laboratory, pharmacy, and dialysis services, we strive to provide comprehensive healthcare under one roof. Supported by an experienced and dedicated team, our focus is on patient safety, comfort, and well-being ",
+    "phone": ["+91971272751", "+919712712752"],
+    "email": "gokulcriticalcare@gmail.com ",
+    "website": "",
+    
+    "location_url": "https://share.google/m8z6u3IRyMU9g60Ji",
+    "location_text": "2nd & 3rd floor saiganga complex , kalubha road, Bhavnagar - 364001",
+    "upi_id": "boim-326402600290@boi",
+    
+    "photo_url": "gokul.jpeg",
+    "banner_url": "gokul_banner.jpeg", 
+    "theme_color": "#0E82E3",
+
+    "instagram": "https://www.instagram.com/gokul_criticalcare_hospital/",
+    "facebook": "https://www.facebook.com/share/19dM6vZm6q/",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+   {
     "id": "temp",
     "name": "",
     "position": "",
