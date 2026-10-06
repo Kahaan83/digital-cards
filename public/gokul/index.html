@@ -17,7 +17,7 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <style>
-        :root { --primary: #2D7578; --bg: #f0f2f5ef; }
+        :root { --primary: #2D7578; --red: #FF2C2C; --bg: #f0f2f5ef; }
         
         body { 
             font-family: 'Poppins', sans-serif; 
@@ -38,7 +38,7 @@
 
         /* --- CARD --- */
         .card { 
-            background: #e6f4f5; 
+            background: #E6F4FF; 
             width: 100%; 
             max-width: 400px; 
             border-radius: 24px; 
@@ -50,7 +50,7 @@
             position: relative;
         }
         
-        .header { width: 100%; height: 140px; position: relative; background-image: url('gokul_banner3.jpeg'); background-size: cover; background-position: center; }
+        .header { width: 100%; height: 140px; position: relative; background-image: url('gokul_banner4.jpeg'); background-size: cover; background-position: center; }
         
         /* QR Button (Top Right of Header) */
         .qr-btn {
@@ -80,7 +80,7 @@
         
         .info { padding: 10px 20px; animation: fadeIn 1s ease backwards; animation-delay: 0.2s; }
         h1 { margin: 10px 0 0; font-size: 1.5rem; color: #333; }
-        .role { color: var(--primary); font-weight: 500; margin: 0; }
+        .role { color: var(--red); font-weight: 500; margin: 0; }
         .comp { color: #888; font-size: 0.9rem; margin: 0; }
         /* --- DOCTORS (side by side) --- */
         .doctors { display: flex; flex-wrap: nowrap; gap: 10px; justify-content: center; margin-top: 16px; }
@@ -95,7 +95,7 @@
         .btn:active { transform: scale(0.95); }
         .btn-primary { background: var(--primary); color: white; width: 100%; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
         .btn-outline { border: 1px solid #db4437; color: #db4437; flex: 1; justify-content: center; }
-        .btn-payment { background: #f0f4ff; color: #0056b3; border: 1px solid #cce5ff; flex: 1; justify-content: center; }
+        .btn-payment { background: transparent; color: var(--red); border: 1px solid var(--red); flex: 1; justify-content: center; }
 
         /* --- CONTACT LIST --- */
         .contact-list { list-style: none; padding: 0 20px; margin-top: 30px; }
@@ -129,7 +129,14 @@
 
         .social-section { display: flex; justify-content: center; gap: 15px; margin: 25px 0; animation: fadeIn 1s ease backwards; animation-delay: 0.8s; }
         .social-icon { width: 45px; height: 45px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #555; font-size: 1.2rem; text-decoration: none; box-shadow: 0 3px 8px rgba(0,0,0,0.1); transition: 0.2s; }
-        .social-icon:hover { color: var(--primary); transform: translateY(-3px) scale(1.1); }
+        .social-icon:hover { transform: translateY(-3px) scale(1.1); }
+        .social-icon.facebook { color: #1877F2; font-size: 1.7rem; }
+        .social-icon.instagram i {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+            font-size: 1.5rem;
+        }
 
         .about { padding: 0 30px; font-size: 0.9rem; color: #0d2c6c; line-height: 1.6; animation: fadeIn 1s ease backwards; animation-delay: 0.9s; }
         .footer { margin-top: 20px; font-size: 0.75rem; color: #ccc; animation: fadeIn 1s ease backwards; animation-delay: 1s; padding-bottom: 80px; }
@@ -230,7 +237,7 @@
     </li>
         </ul>
 
-        <div class="social-section"><a href="https://www.instagram.com/gokul_criticalcare_hospital/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a><a href="https://www.facebook.com/share/19dM6vZm6q/" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a></div>
+        <div class="social-section"><a href="https://www.instagram.com/gokul_criticalcare_hospital/" target="_blank" class="social-icon instagram"><i class="fab fa-instagram"></i></a><a href="https://www.facebook.com/share/19dM6vZm6q/" target="_blank" class="social-icon facebook"><i class="fab fa-facebook"></i></a></div>
 
         <div class="about">A 20+ Bed Multispeciality Hospital in the Heart of Bhavnagar, dedicated to delivering compassionate, high-quality, ethical , economical healthcare with modern facilities and expert medical care. With 24x7 availability of Intensivists, advanced critical care,  with in-house 2D Echo, laboratory, pharmacy, and dialysis services, we strive to provide comprehensive healthcare under one roof. Supported by an experienced and dedicated team, our focus is on patient safety, comfort, and well-being </div>
         <div class="footer">
