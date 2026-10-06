@@ -249,6 +249,14 @@ def main():
     new_state = {'template_hash': current_template_hash, 'users': {}}
 
     for user in users:
+        # Frozen entries: don't rebuild, and carry their saved hash forward
+        if user.get('skip'):
+            old_hash = state.get('users', {}).get(user['id'])
+            if old_hash:
+                new_state['users'][user['id']] = old_hash
+            print(f"🚫 Ignored {user['name']} (skip flag set)")
+            continue
+
         u_dir = os.path.join(OUTPUT_DIR, user['id'])
         index_path = os.path.join(u_dir, 'index.html')
         

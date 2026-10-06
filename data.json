@@ -170,6 +170,7 @@
   },
    {
     "id": "gokul",
+    "skip": false,
     "name": "Gokul Critical Care Hospital",
     "position": "24x7 Emergency",
     "company": "",
@@ -194,7 +195,7 @@
     "upi_id": "boim-326402600290@boi",
     
     "photo_url": "gokul.jpeg",
-    "banner_url": "gokul_banner.jpeg", 
+    "banner_url": "gokul_banner3.jpeg", 
     "theme_color": "#FF2C2C",
 
     "instagram": "https://www.instagram.com/gokul_criticalcare_hospital/",
