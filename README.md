@@ -1,108 +1,151 @@
-```markdown
+<div align="center">
+
 # 📇 Automated Digital Business Card Generator
 
-> A custom-built Static Site Generator (SSG) that automates the creation of responsive, high-performance digital profile sites from raw JSON data.
+<p><strong>A high-performance Static Site Generator (SSG) that converts structured JSON datasets into responsive, dynamic digital business cards with vCard automation.</strong></p>
 
-![Project Status](https://img.shields.io/badge/Status-Active-success)
-![Python](https://img.shields.io/badge/Built%20With-Python%203-blue)
-![Vercel](https://img.shields.io/badge/Deployment-Vercel-black)
+[![Status](https://img.shields.io/badge/Status-Active-3ddc84?style=for-the-badge)](https://github.com/Kahaan83/digital-cards)
+[![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Deployment](https://img.shields.io/badge/Deployment-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+<br />
+
+<img src="assets/preview.png" alt="Digital Business Card Preview" width="600" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+
+<br /><br />
+
+</div>
+
+---
 
 ## 🚀 Overview
 
-This project is not just a website; it is an **automation engine**. Instead of manually coding HTML for individual employees, I engineered a Python script that parses a central dataset (`data.json`) and programmatically generates a unique, fully-featured website for every user.
+Managing digital identity pages for teams or businesses often leads to tedious maintenance and repetitive HTML templating. 
 
-It features an **Incremental Build System** (using MD5 hashing) that optimizes deployment times by only rebuilding profiles that have actually changed, similar to how React or Next.js handles virtual DOM updates.
+This project solves that by acting as an **automation engine**:
+Instead of manually coding HTML for individual profiles, a Python-driven static-site generator parses a centralized dataset (`data.json`) and programmatically generates an optimized, uniquely themed web card for each individual—complete with QR code modal popups and direct downloadable `.vcf` contact cards.
+
+---
 
 ## ✨ Key Features
 
-* **⚡ Custom Static Site Generation (SSG):** Converts structured JSON data into pure HTML5/CSS3 pages.
-* **🧠 Incremental Build Intelligence:** Uses MD5 fingerprinting to track state (`build_state.json`). If a user's data hasn't changed, the script skips rebuilding their site to save resources.
-* **📱 vCard 3.0 Automation:** Programmatically generates `.vcf` contact files that work across iOS and Android.
-* **🎨 Dynamic Brand Theming:** The template adapts CSS variables (buttons, highlights) based on the specific brand color defined in the dataset.
-* **🔗 Smart Asset Management:** Automatically detects and resolves image file extensions (`.jpg` vs `.png`) to prevent broken links.
-* **🌊 Advanced UI/UX:** Features "Waterfall" CSS animations and mobile-first responsive design.
+- **⚡ Custom Static Site Generation (SSG):** Transforms clean JSON records into lightweight, zero-dependency HTML5/CSS3 pages.
+- **🧠 Incremental MD5 Build Intelligence:** Computes MD5 checksum fingerprints for templates and records (`build_state.json`). If a profile hasn't changed, the script automatically skips rebuilding it to optimize deployment times.
+- **📱 vCard 3.0 Automation:** Programmatically produces compatible `.vcf` contact cards that download and import into iOS Contacts and Android Contacts with one click.
+- **🎨 Dynamic Brand Theming:** Automatically adapts CSS variables (accent hues, button shadows, interactive states) based on each user's unique brand hex code.
+- **🔗 Smart Asset Resolution:** Intelligently resolves image formats (`.jpg`, `.png`, `.webp`) from local source paths to prevent broken image references.
+- **🌊 Modern Mobile-First UX:** Tailored for smartphone screens with waterfall animations, smooth modal interactions, and touch-friendly targets.
+
+---
 
 ## 🛠️ Project Structure
 
 ```bash
-├── build.py           # The Engine: Main logic script
-├── data.json          # The Database: User profiles and settings
-├── template.html      # The Blueprint: HTML/CSS design
-├── build_state.json   # The Memory: Stores hashes for incremental builds
-├── photos/            # Source images (local storage)
-└── public/            # Output folder (Generated sites go here)
-
+digital-cards/
+├── build.py           # The SSG Engine: Data parsing, hashing, & generation
+├── data.json          # The Database: User profiles, theme colors, and social links
+├── template.html      # The Blueprint: Semantic HTML shell & CSS design system
+├── build_state.json   # Incremental Memory: Stores hashes to skip redundant builds
+├── photos/            # Source profile photos and avatar images
+├── public/            # The Output: Production-ready static builds (deployable to Vercel)
+│   ├── kahaan/
+│   │   └── index.html
+│   └── contact.vcf
+└── assets/            # Showcase images and documentation assets
 ```
+
+---
 
 ## ⚙️ How It Works
 
-1. **Input:** The script reads `data.json` and `template.html`.
-2. **Hashing:** It calculates a unique hash for the template and each user profile.
-3. **Comparison:** It checks `build_state.json` to see if the hash differs from the previous run.
-4. **Generation:**
-* Injects data into the HTML template.
-* Generates the QR code modal logic.
-* Creates the downloadable `contact.vcf` file.
+```
+┌─────────────────┐       ┌─────────────────┐
+│    data.json    │   +   │  template.html  │
+└────────┬────────┘       └────────┬────────┘
+         │                         │
+         └───────────► ◄───────────┘
+                       │
+          [ MD5 Hash State Comparison ]
+          ├── Unchanged? ──► Skip Rebuild
+          └── Modified?  ──► Inject Data + Generate .vcf
+                       │
+                       ▼
+          ┌─────────────────────────┐
+          │     public/<user>/      │
+          │  Production Static HTML │
+          └─────────────────────────┘
+```
 
+1. **Input:** Reads user configurations from `data.json` and layout tokens from `template.html`.
+2. **Hashing:** Calculates an MD5 hash of each profile record and compares it with `build_state.json`.
+3. **Template Compilation:** For modified profiles, injects name, title, contact methods, and theme colors into the template.
+4. **Asset Export:** Generates matching vCard (`.vcf`) files and exports everything to `public/`.
 
-5. **Output:** Saves the optimized files to the `public/` directory, ready for Vercel deployment.
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-* Python 3.x
-* Git
+- Python 3.9+
+- Git
 
 ### Installation
 
-1. **Clone the repo:**
-```bash
-git clone [https://github.com/yourusername/digital-cards.git](https://github.com/yourusername/digital-cards.git)
-cd digital-cards
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Kahaan83/digital-cards.git
+   cd digital-cards
+   ```
 
-```
+2. **Add or edit profiles in `data.json`:**
+   ```json
+   {
+     "id": "alex",
+     "name": "Alex Mercer",
+     "position": "Hardware Engineer",
+     "phone": "+1234567890",
+     "email": "alex@example.com",
+     "theme_color": "#2563eb",
+     "photo_url": "alex.jpg"
+   }
+   ```
 
+3. **Run the build engine:**
+   ```bash
+   python build.py
+   ```
+   *Console output:*
+   ```text
+   [BUILD] Hashing templates and records...
+   [NEW] Building profile for Alex Mercer -> public/alex/index.html
+   [SKIP] Profile 'kahaan' is unchanged.
+   [SUCCESS] Build complete in 0.04s.
+   ```
 
-2. **Add your data:**
-Edit `data.json` to add a new profile:
-```json
-{
-  "id": "john",
-  "name": "John Doe",
-  "position": "Software Engineer",
-  "phone": "+919876543210",
-  "email": "john@example.com",
-  "theme_color": "#2563eb",
-  "photo_url": "john.jpg"
-}
-
-```
-
-
-3. **Run the Build Engine:**
-```bash
-python build.py
-
-```
-
-
-*Output:* `🔄 Rebuilt John Doe`
 4. **Deploy:**
-```bash
-git push origin main
-
-```
-
-
-
-## 🔮 Future Roadmap
-
-* [ ] **Cloud Integration:** Move image storage to AWS S3/Cloudinary for scalability beyond 1GB.
-* [ ] **Database Migration:** Transition from `data.json` to a PostgreSQL database for managing 1,000+ users.
-* [ ] **Admin Dashboard:** Build a React frontend to allow users to edit their own profiles without touching JSON.
+   Connect the repository to **Vercel** or **Cloudflare Pages** targeting the `public/` directory for automatic deployment on git push.
 
 ---
 
-*Built with ❤️ by Kahaan Shah*
+## 🔮 Roadmap
 
+- [ ] **Cloud Storage Sync:** Add automated image uploads to Cloudinary or AWS S3.
+- [ ] **QR Code Image Generation:** Embed SVG QR codes directly into downloadable cards for print/NFC tags.
+- [ ] **Web UI Dashboard:** Simple browser-based editor to modify `data.json` without touching code directly.
+
+---
+
+## 👤 Author
+
+**Kahaan Shah**
+- Portfolio: [kahaanshah.in](https://kahaanshah.in)
+- GitHub: [@Kahaan83](https://github.com/Kahaan83)
+- LinkedIn: [linkedin.com/in/kahaan-shah-842095334](https://www.linkedin.com/in/kahaan-shah-842095334/)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
